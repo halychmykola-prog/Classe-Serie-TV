@@ -8,45 +8,50 @@ namespace SerieTV
 {
     internal class Program
     {
-        static int ricerca(string nome, SerieTV[] serie, int dim)
+        //RICERCA
+        static int ricerca(string nome, SerieTV[] obj, int dim)
         {
             for (int i = 0; i < dim; i++)
             {
-                if (serie[i].Nome == nome)
+                if (obj[i].Nome == nome)
                     return i;
             }
             return -1;
         }
 
-        static void AggiungiSerie(SerieTV[] serie, ref int dim, string nome, int episodi, int voto)
+        //AGGIUNGI
+        static void AggiungiSerie(SerieTV[] serie, ref int dim, SerieTV obj)
         {
             serie[dim] = new SerieTV();
-            serie[dim].Nome = nome;
-            serie[dim].Episodi = episodi;
-            serie[dim].Voto = voto;
+            serie[dim].Nome = obj.Nome;
+            serie[dim].Episodi = obj.Episodi;
+            serie[dim].Voto = obj.Voto;
             dim++;
         }
 
-        static string VisualizzaSerie(SerieTV[] serie, int dim)
+        //VISUALIZZA
+        static string VisualizzaSerie(SerieTV[] obj, int dim)
         {
             string result = "";
             for (int i = 0; i < dim; i++)
             {
-                result += serie[i].ToString() + "\n";
+                result += obj[i].ToString() + "\n";
             }
             return result;
         }
 
-        static void ModificaSerie(SerieTV[] serie, int dim, string nome, string nuovoNome, int nuoviEpisodi, int nuovoVoto)
+        //MODIFICA
+        static void ModificaSerie(SerieTV[] serie, int dim, int pos, SerieTV obj)
         {
-            int pos = ricerca(nome, serie, dim);
             if (pos != -1)
             {
-                serie[pos].Nome = nuovoNome;
-                serie[pos].Episodi = nuoviEpisodi;
-                serie[pos].Voto = nuovoVoto;
+                serie[pos].Nome = obj.Nome;
+                serie[pos].Episodi = obj.Episodi;
+                serie[pos].Voto = obj.Voto;
             }
         }
+
+        //ELIMINA
 
         static void EliminaSerie(SerieTV[] serie, ref int dim, string nome)
         {
@@ -65,10 +70,11 @@ namespace SerieTV
         {
 
             int scelta;
-            SerieTV[] serie = new SerieTV[10];
-            SerieTV serie_mod = new SerieTV();
+            SerieTV[] serie = new SerieTV[10];//istanziamento dell'array di oggetti
+            SerieTV serie_mod = new SerieTV();//istanziamento dell'oggetto per aggiungi e modifica serie
 
-            int n = 0;
+            int n = 0;//variabile per tenere traccia del numero di serie inserite
+
             do
             {
                 //menù
@@ -83,16 +89,17 @@ namespace SerieTV
                 switch (scelta)
                 {
                     case 1://aggiungi serie
+
                         //parte inserimento dati
                         Console.WriteLine("inserisci il nome della serie");
-                        string nome = Console.ReadLine();
+                        serie_mod.Nome = Console.ReadLine();
                         Console.WriteLine("inserisci il numero di episodi");
-                        int num_episodi = Convert.ToInt32(Console.ReadLine());
+                        serie_mod.Episodi = Convert.ToInt32(Console.ReadLine());
                         Console.WriteLine("inserisci il il voto di serie");
-                        int voto = Convert.ToInt32(Console.ReadLine());
+                        serie_mod.Voto = Convert.ToInt32(Console.ReadLine());
 
                         //func
-                        AggiungiSerie(serie, ref n, nome, num_episodi, voto);
+                        AggiungiSerie(serie, ref n, serie_mod);
                         break;
 
                     case 2://visualizza serie
@@ -107,14 +114,14 @@ namespace SerieTV
 
                         //parte inserimento dati nuovi
                         Console.WriteLine("inserisci il nome nuovo");
-                        nome = Console.ReadLine();
+                        serie_mod.Nome = Console.ReadLine();
                         Console.WriteLine("inserisci la quantita di episodi nuova");
-                        num_episodi = Convert.ToInt32(Console.ReadLine());
+                        serie_mod.Episodi = Convert.ToInt32(Console.ReadLine());
                         Console.WriteLine("inserisci il voto nuovo");
-                        voto = Convert.ToInt32(Console.ReadLine());
+                        serie_mod.Voto = Convert.ToInt32(Console.ReadLine());
 
                         //func
-                        ModificaSerie(serie, n, imya, nome, num_episodi, voto);
+                        ModificaSerie(serie, n, pos, serie_mod);
                         break;
 
                     case 4://elimina serie
@@ -128,7 +135,7 @@ namespace SerieTV
                         break;
                 }
             }
-            while (scelta != 0);
+            while (scelta != 0);//uscita con zero
         }
     }
 }
